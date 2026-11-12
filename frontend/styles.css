@@ -1,0 +1,346 @@
+/* --- PALETA EXTRAÍDA DEL PROTOTIPO --- */
+:root {
+    --header-bg: #839868;          /* Verde olivo / verde seco */
+    --header-accent: #f6af65;      /* Franja naranja / durazno */
+    --bg-main: #f6eee0;             /* Fondo beige / crema */
+    --card-bg: #ffffff;            /* Tarjetas blanco puro */
+    
+    --accent-lime: #7ef065;        /* Verde lima brillante ("Registrar venta") */
+    --accent-lime-hover: #6cd454;
+    --accent-orange: #f96637;      /* Naranja alerta ("Notificaciones") */
+    --accent-orange-hover: #e05327;
+    
+    --text-dark: #1e2b13;          /* Verde oscuro para textos/títulos */
+    --text-muted: #65735b;
+    --border-color: #e4dacb;
+    
+    --btn-blue: #3b82f6;           /* Azul para botones secundarios/login */
+    --btn-blue-hover: #2563eb;
+    --danger: #ef4444;
+    
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-dark);
+    min-height: 100vh;
+}
+
+/* --- BARRA DE NAVEGACIÓN Y ENCABEZADO --- */
+header {
+    background-color: var(--header-bg);
+    color: white;
+    padding: 16px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 6px solid var(--header-accent);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+}
+
+header .logo {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+    font-family: Georgia, 'Times New Roman', serif;
+}
+
+header .user-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-weight: 600;
+}
+
+/* --- CONTENEDOR Y ESTRUCTURA --- */
+.container {
+    max-width: 1240px;
+    margin: 24px auto;
+    padding: 0 20px;
+}
+
+/* --- TARJETAS CONTENEDORAS --- */
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.card h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text-dark);
+}
+
+/* --- PANTALLA DE LOGIN --- */
+.login-card {
+    max-width: 400px;
+    margin: 80px auto;
+    border-top: 6px solid var(--header-bg);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.login-card h2 {
+    font-size: 1.6rem;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* --- FORMULARIOS E INPUTS --- */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.form-group input, 
+#search-prod {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    background-color: #ffffff;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus, 
+#search-prod:focus {
+    outline: none;
+    border-color: var(--header-bg);
+}
+
+#search-prod {
+    margin-bottom: 16px;
+    border-radius: 30px;
+    padding-left: 18px;
+}
+
+/* --- BOTONES --- */
+button {
+    cursor: pointer;
+    border: none;
+    padding: 10px 18px;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* Botón principal estilo verde lima (Registrar venta / Cobrar) */
+.btn-success { 
+    background-color: var(--accent-lime); 
+    color: var(--text-dark); 
+}
+.btn-success:hover { 
+    background-color: var(--accent-lime-hover); 
+}
+
+/* Botón estilo azul */
+.btn-primary { 
+    background-color: var(--btn-blue); 
+    color: white; 
+}
+.btn-primary:hover { 
+    background-color: var(--btn-blue-hover); 
+}
+
+/* Botón estilo rojo / peligro */
+.btn-danger { 
+    background-color: var(--danger); 
+    color: white; 
+}
+.btn-danger-sm { 
+    background-color: #fee2e2; 
+    color: var(--danger); 
+    padding: 4px 10px; 
+    font-size: 0.82rem; 
+    border-radius: 6px;
+}
+.btn-danger-sm:hover {
+    background-color: var(--danger);
+    color: white;
+}
+
+.btn-block { width: 100%; }
+
+/* --- SECCIONES Y GRIDS --- */
+.pos-grid, .admin-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 24px;
+}
+
+/* --- CATÁLOGO DE PRODUCTOS EN TARJETAS BLANCAS --- */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 16px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+.product-card {
+    background: #ffffff;
+    border: 2px solid var(--border-color);
+    padding: 16px;
+    border-radius: var(--radius-lg);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--header-bg);
+}
+
+.product-card h4 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+}
+
+.product-card p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+
+.product-card .price {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin: 8px 0 4px 0;
+}
+
+.product-card .stock {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+/* Alerta bajo stock dentro de la tarjeta */
+.product-card.low-stock {
+    border-color: var(--accent-orange);
+    background-color: #fff9f6;
+}
+
+/* --- TABLAS DE CARRITO E HISTORIAL --- */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.data-table th {
+    background-color: var(--bg-main);
+    color: var(--text-dark);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 10px;
+    border-bottom: 2px solid var(--border-color);
+    text-align: left;
+}
+
+.data-table td {
+    padding: 10px;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* --- PANEL DE ALERTAS Y NOTIFICACIONES (ESTILO VIBRANTE) --- */
+.alert-list {
+    list-style: none;
+    margin: 12px 0 20px 0;
+}
+
+.alert-list li {
+    background-color: var(--accent-orange);
+    color: #ffffff;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(249, 102, 55, 0.25);
+}
+
+/* --- MÉTRICAS DE ADMIN --- */
+.metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.metric-box {
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    padding: 14px;
+    border-radius: var(--radius-md);
+    text-align: center;
+}
+
+.metric-box h5 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.metric-box p {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-top: 4px;
+}
+
+/* --- BADGES --- */
+.badge.completada { background-color: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 6px; font-weight: 700; }
+.badge.cancelada { background-color: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 6px; font-weight: 700; }
+
+/* --- UTILIDADES --- */
+.hidden { display: none !important; }
+.mt-20 { margin-top: 24px; }
+.error-msg {
+    color: white;
+    background-color: var(--danger);
+    padding: 10px;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    margin-top: 14px;
+    text-align: center;
+    font-weight: 700;
+}
