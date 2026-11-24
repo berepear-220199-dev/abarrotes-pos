@@ -46,7 +46,7 @@ async function realizarLogin(event) {
         const response = await fetch(`${API_URL}/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ usuario: usuarioInput, password: passwordInput })
+            body: JSON.stringify({ username: usuarioInput, password: passwordInput })
         });
 
         if (!response.ok) {
@@ -96,12 +96,13 @@ function renderProductosGrid(lista) {
     grid.innerHTML = "";
 
     lista.forEach(p => {
+        const precio = Number(p.precio ?? p.precio_unitario ?? 0);
         const item = document.createElement("div");
         item.className = `product-card ${p.stock <= p.stock_minimo ? 'low-stock' : ''}`;
         item.innerHTML = `
             <h4>${p.nombre}</h4>
             <p>SKU: ${p.sku}</p>
-            <p class="price">$${p.precio_unitario.toFixed(2)}</p>
+            <p class="price">$${precio.toFixed(2)}</p>
             <p class="stock">Stock: ${p.stock} pzas</p>
             <button type="button" class="btn-primary" onclick="agregarAlCarrito(${p.id})">Agregar</button>
         `;
@@ -122,6 +123,7 @@ function agregarAlCarrito(prodId) {
         return;
     }
 
+    const precio = Number(prod.precio ?? prod.precio_unitario ?? 0);
     const itemEnCarrito = cart.find(c => c.producto_id === prodId);
     if (itemEnCarrito) {
         if (itemEnCarrito.cantidad + 1 > prod.stock) {
@@ -133,7 +135,7 @@ function agregarAlCarrito(prodId) {
         cart.push({
             producto_id: prod.id,
             nombre: prod.nombre,
-            precio_unitario: prod.precio_unitario,
+            precio_unitario: precio,
             cantidad: 1
         });
     }
@@ -263,7 +265,7 @@ async function agregarNuevoProducto(event) {
     const payload = {
         sku: document.getElementById("prod-sku").value,
         nombre: document.getElementById("prod-nombre").value,
-        precio_unitario: parseFloat(document.getElementById("prod-precio").value),
+        precio: parseFloat(document.getElementById("prod-precio").value),
         stock: parseInt(document.getElementById("prod-stock").value),
         stock_minimo: parseInt(document.getElementById("prod-stock-min").value),
         proveedor: document.getElementById("prod-proveedor").value
@@ -278,7 +280,7 @@ async function agregarNuevoProducto(event) {
 
         if (!res.ok) {
             const err = await res.json();
-            throw new Error(err.detail);
+            throw new Error(err.detail || "Error al guardar el producto");
         }
 
         alert("Producto agregado correctamente");
@@ -298,15 +300,17 @@ async function cargarPanelAdmin() {
         ]);
 
         const rep = await repRes.json();
-        document.getElementById("metric-dia").textContent = rep.total_diario.toFixed(2);
-        document.getElementById("metric-mes").textContent = rep.total_mensual.toFixed(2);
+        const totalDia = Number(rep.ingresos_hoy ?? rep.total_diario ?? 0);
+        const totalMes = Number(rep.ingresos_mes ?? rep.total_mensual ?? 0);
+        document.getElementById("metric-dia").textContent = totalDia.toFixed(2);
+        document.getElementById("metric-mes").textContent = totalMes.toFixed(2);
 
         const notifs = await notifRes.json();
         const notifUl = document.getElementById("notif-list");
         notifUl.innerHTML = notifs.length === 0 ? "<li>Sin alertas de bajo stock</li>" : "";
         notifs.forEach(n => {
             const li = document.createElement("li");
-            li.textContent = ` ${n.mensaje} (${n.fecha})`;
+            li.textContent = `${n.mensaje} (${n.fecha})`;
             notifUl.appendChild(li);
         });
 
@@ -314,10 +318,14 @@ async function cargarPanelAdmin() {
         const compTbody = document.getElementById("reorder-table-body");
         compTbody.innerHTML = "";
         compras.forEach(c => {
+            const prodInfo = productosCache.find(p => p.id === c.producto_id) || {};
+            const sku = c.sku || prodInfo.sku || "N/A";
+            const nombre = c.producto_nombre || c.nombre || prodInfo.nombre || "Producto";
+
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td>${c.sku}</td>
-                <td>${c.nombre}</td>
+                <td>${sku}</td>
+                <td>${nombre}</td>
                 <td>${c.proveedor}</td>
                 <td><strong>+${c.cantidad_sugerida}</strong></td>
             `;

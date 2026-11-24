@@ -1,13 +1,68 @@
 services:
-  backend:
+  inventario-service:
     build:
       context: .
-      dockerfile: backend/Dockerfile
-    container_name: abarrotes-backend
+      dockerfile: services/inventario/Dockerfile
+    container_name: abarrotes-inventario
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./data/inventario:/app/data
+    restart: unless-stopped
+
+  notificaciones-service:
+    build:
+      context: .
+      dockerfile: services/notificaciones/Dockerfile
+    container_name: abarrotes-notificaciones
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./data/notificaciones:/app/data
+    restart: unless-stopped
+
+  compras-service:
+    build:
+      context: .
+      dockerfile: services/compras/Dockerfile
+    container_name: abarrotes-compras
+    ports:
+      - "8004:8000"
+    volumes:
+      - ./data/compras:/app/data
+    restart: unless-stopped
+
+  ventas-service:
+    build:
+      context: .
+      dockerfile: services/ventas/Dockerfile
+    container_name: abarrotes-ventas
+    ports:
+      - "8001:8000"
+    environment:
+      - INVENTARIO_URL=http://inventario-service:8000
+      - NOTIFICACIONES_URL=http://notificaciones-service:8000
+      - COMPRAS_URL=http://compras-service:8000
+    volumes:
+      - ./data/ventas:/app/data
+    depends_on:
+      - inventario-service
+      - notificaciones-service
+      - compras-service
+    restart: unless-stopped
+
+  api-gateway:
+    image: nginx:alpine
+    container_name: abarrotes-gateway
     ports:
       - "8000:8000"
     volumes:
-      - ./data:/app/data
+      - ./gateway/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - ventas-service
+      - inventario-service
+      - notificaciones-service
+      - compras-service
     restart: unless-stopped
 
   frontend:
@@ -18,5 +73,5 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - backend
+      - api-gateway
     restart: unless-stopped
